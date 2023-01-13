@@ -59,8 +59,8 @@ if __name__ == '__main__':
         if cv2.waitKey(1) == ord('q'):
             break 
 
-vid.release()
-cv2.destroyAllWindows()
+    vid.release()
+    cv2.destroyAllWindows()
         
             
         
