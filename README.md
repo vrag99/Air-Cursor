@@ -1,5 +1,4 @@
 <img src = "/AIR_CURSOR.png" alt="aircursor" align="center" width="900" />
-<img alt="GitHub repo file count" src="https://img.shields.io/github/directory-file-count/vrag99/Air-Cursor">
 
 # About Our Project
 
