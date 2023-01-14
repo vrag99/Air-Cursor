@@ -11,6 +11,8 @@ import volumeHandController
 from HandTrackerModule import HandTracker
 from GestureRecognition import recognise
 import math
+import caller_class
+
 def Zoom():
     pyautogui.FAILSAFE = False
 
@@ -29,24 +31,16 @@ def Zoom():
     initial, final = 0, 0
 
     while True:
-        privacy.pir()
+        
         success, img = vid.read()
+        #privacy.pir()
         img = cv2.flip(img, 1)
         
         ThumbTip = tracker.getLms(img, 4)
         IndexFingerTip = tracker.getLms(img, 8)
         tracker.findHands(img)
         
-        condition = GestureRecognition.recognise(img)
-        if(condition == '3-fingers-up_thumb_closed'):
-            print("Scrolling")
-            cv2.destroyAllWindows()
-            Scroll.scroll()
-     
-        elif(condition == 'index-finger-up_thumb_opened'):
-            cv2.destroyAllWindows()
-            CursorControl.cc()
-       
+        
 
         if IndexFingerTip != None and ThumbTip != None:
             x1, y1 = ThumbTip[0], ThumbTip[1]
@@ -78,4 +72,5 @@ def Zoom():
                         pyautogui.hotkey('ctrl', '=')
         elif IndexFingerTip == None and ThumbTip == None:
             continue
-       
+        
+    caller_class.call_c()       

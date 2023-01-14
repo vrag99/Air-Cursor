@@ -9,7 +9,7 @@ import CursorControl
 import privacy
 import volumeHandController
 from HandTrackerModule import HandTracker
-
+import caller_class
 
 ## a trash code version, just controls the pointer and click is enabled (not importable)
 pyautogui.FAILSAFE = False
@@ -21,8 +21,9 @@ def cc():
     sensitivity = 1.5
 
     while True:
-        privacy.pir()
+        
         success, img = vid.read()
+        #privacy.pir(img)
         img = cv2.flip(img, 1)
         indexFingerTip = tracker.getLms(img, 8)
         thumbTip = tracker.getLms(img, 4)
@@ -44,13 +45,13 @@ def cc():
             else:
                 if distance <= 28:
                     pyautogui.click(move_x, move_y)
-            print(distance)
+            # print(distance)
             
-        condition = GestureRecognition.recognise(img)
-        cv2.imshow('frame', img)
-        if condition !='index-finger-up_thumb_opened' :
-            return
-
+        # condition = GestureRecognition.recognise(img)
+        # cv2.imshow('frame', img)
+        # if condition !='index-finger-up_thumb_opened' :
+        #     return
+    caller_class.call_c()
     vid.release()
     cv2.destroyAllWindows()
-    
+        

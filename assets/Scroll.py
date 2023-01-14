@@ -10,7 +10,7 @@ import CursorControl
 import privacy
 import volumeHandController
 from HandTrackerModule import HandTracker
-
+import caller_class
 pyautogui.FAILSAFE=False
 def scroll():
     vid = cv2.VideoCapture(0)
@@ -32,14 +32,27 @@ def scroll():
 
     l=[]
     while True:
-        privacy.pir()
+        
         success, img = vid.read()
+        #privacy.pir(img)
         img = cv2.flip(img,1)
         indexFingerTip = tracker.getLms(img, 8)
         middleFingerTip = tracker.getLms(img,12)
         img = tracker.findHands(img)
         scroll1(img)
-        cv2.imshow('frame',img)
+        #cv2.imshow('frame',img)
+        
+
+
+        if cv2.waitKey(1) & 0xFF == 'q':
+            break
+               
+
+    vid.release()
+    cv2.destroyAllWindows()
+    caller_class.call_c()
+
+        
         # h,w,c = img.shape
         # if indexFingerTip != None and middleFingerTip!=None:
         #     move_x = SCREEN_WIDTH//w*indexFingerTip[0]*sensitivity
@@ -61,13 +74,6 @@ def scroll():
         #         l.clear()
 
     # tracker = HandTracker()
-        condition = GestureRecognition.recognise(img)
-        if condition != '3-fingers-up_thumb_closed':
-                print("")
-                # return
-
-    vid.release()
-    cv2.destroyAllWindows()
-
+        
     
     
