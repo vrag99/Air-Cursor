@@ -1,62 +1,81 @@
 import cv2
 import mediapipe as mp
-import pyautogui
+import pyautogui 
+import time
+import GestureRecognition
+import Scroll
+import zoom
+import CursorControl
+import privacy
+import volumeHandController
 from HandTrackerModule import HandTracker
+from GestureRecognition import recognise
 import math
+def Zoom():
+    pyautogui.FAILSAFE = False
 
-pyautogui.FAILSAFE = False
+    # initializing camera
+    vid = cv2.VideoCapture(0)
+    wCam, hCam = 640, 480
+    cap = cv2.VideoCapture(0)
+    cap.set(3, wCam)
+    cap.set(4, hCam)
 
-# initializing camera
-vid = cv2.VideoCapture(0)
-wCam, hCam = 640, 480
-cap = cv2.VideoCapture(0)
-cap.set(3, wCam)
-cap.set(4, hCam)
+    tracker = HandTracker()
 
-tracker = HandTracker()
+    SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
+    reverse_sensitivity = 5  # tells how much change in distance between fingers for zoom
 
-SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
-reverse_sensitivity = 5  # tells how much change in distance between fingers for zoom
+    initial, final = 0, 0
 
-initial, final = 0, 0
+    while True:
+        privacy.pir()
+        success, img = vid.read()
+        img = cv2.flip(img, 1)
+        
+        ThumbTip = tracker.getLms(img, 4)
+        IndexFingerTip = tracker.getLms(img, 8)
+        tracker.findHands(img)
+        
+        condition = GestureRecognition.recognise(img)
+        if(condition == '3-fingers-up_thumb_closed'):
+            print("Scrolling")
+            cv2.destroyAllWindows()
+            Scroll.scroll()
+     
+        elif(condition == 'index-finger-up_thumb_opened'):
+            cv2.destroyAllWindows()
+            CursorControl.cc()
+       
 
-while True:
-    success, img = vid.read()
-    img = cv2.flip(img, 1)
-    h = img.shape[0]
+        if IndexFingerTip != None and ThumbTip != None:
+            x1, y1 = ThumbTip[0], ThumbTip[1]
+            x2, y2 = IndexFingerTip[0], IndexFingerTip[1]
 
-    ThumbTip = tracker.getLms(img, 4)
-    IndexFingerTip = tracker.getLms(img, 8)
-    tracker.findHands(img)
+            length = math.hypot(x1 - x2, y1 - y2)
 
-    if IndexFingerTip != None and ThumbTip != None:
-        x1, y1 = ThumbTip[0], ThumbTip[1]
-        x2, y2 = IndexFingerTip[0], IndexFingerTip[1]
+            # cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
 
-        length = math.hypot(x1 - x2, y1 - y2)
+            initial = final
+            final = length
+            
+            change = (final - initial)
 
-        # cv2.line(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+            if change < 0:
+                # cv2.putText(img, "decrease", (50, 50),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+                if abs(change) >= reverse_sensitivity:
+                    n = int(abs(change)/reverse_sensitivity)
+                    for i in range(n):
+                        pyautogui.hotkey('ctrl', '-')
 
-        initial = final
-        final = length
-    change = (final - initial)
-
-    if change < 0:
-        # cv2.putText(img, "decrease", (50, 50),
-        #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
-        if abs(change) >= reverse_sensitivity:
-            n = int(abs(change)/reverse_sensitivity)
-            for i in range(n):
-                pyautogui.hotkey('ctrl', '-')
-
-    elif change > 0:
-        # cv2.putText(img, "increase", (50, 50),
-        #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
-        if abs(change) >= reverse_sensitivity:
-            n = int(abs(change)/reverse_sensitivity)
-            for i in range(n):
-                pyautogui.hotkey('ctrl', '=')
-
-    # cv2.imshow("video", img)
-    # if cv2.waitKey(1) == ord('q'):
-    #     break
+            elif change > 0:
+                # cv2.putText(img, "increase", (50, 50),
+                #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 3)
+                if abs(change) >= reverse_sensitivity:
+                    n = int(abs(change)/reverse_sensitivity)
+                    for i in range(n):
+                        pyautogui.hotkey('ctrl', '=')
+        elif IndexFingerTip == None and ThumbTip == None:
+            continue
+       

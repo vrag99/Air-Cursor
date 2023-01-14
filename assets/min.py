@@ -2,7 +2,15 @@ import cv2
 import mediapipe as mp
 import pyautogui 
 import time
+import GestureRecognition
+import Scroll
+import zoom
+import CursorControl
+import privacy
+import volumeHandController
 from HandTrackerModule import HandTracker
+import time
+
 import GestureRecognition
 
 mp_drawing = mp.solutions.drawing_utils
@@ -14,6 +22,7 @@ with mp_hands.Hands(
     min_tracking_confidence=0.5) as hands:
     
   while cap.isOpened():
+    privacy.pir()
     success, image = cap.read()
     if not success:
       print("Ignoring empty camera frame.")
