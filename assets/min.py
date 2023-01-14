@@ -3,7 +3,7 @@ import mediapipe as mp
 import pyautogui 
 import time
 from HandTrackerModule import HandTracker
-import GestureRecognition 
+import GestureRecognition
 
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
@@ -24,26 +24,26 @@ with mp_hands.Hands(
     condition = GestureRecognition.recognise(image)
     
     if(condition == 'fist' and conditionInitial == 'open-palm' or conditionInitial == 'fist' and condition == 'open-palm'):
-      print("Worked",condition)
+      #print("Worked",condition)
       pyautogui.hotkey('win','d')
       conditionInitial = condition  
       time.sleep(1)
     else:
-      print(condition)
+      #print(condition)
       conditionInitial = condition    
 
     if(conditionInitial == 'fist' and condition == 'open-palm'):
-        print("Worked",condition)
+        #print("Worked",condition)
         
         pyautogui.hotkey('win','d') 
         conditionInitial = condition 
         time.sleep(3)
     else:
-        print(condition)
+        #print(condition)
         conditionInitial = condition 
 
-    cv2.imshow('MediaPipe Hands', image)
-    if cv2.waitKey(1) & 0xFF == 'q':
-     break
+    # cv2.imshow('MediaPipe Hands', image)
+    # if cv2.waitKey(1) & 0xFF == 'q':
+    #  break
 cap.release()
     

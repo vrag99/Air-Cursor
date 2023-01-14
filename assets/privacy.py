@@ -30,14 +30,14 @@ with mp_face_detection.FaceDetection(
        # if (results.detections[0]).z <=
         count+=1
     if count > 1 and flag ==0 :
-        print(count)
+        #print(count)
         ctypes.windll.user32.LockWorkStation()
         flag+=1
     count =0    
-    mp_drawing.draw_detection(image, results.detections[0])
+    # mp_drawing.draw_detection(image, results.detections[0])
     
     # Flip the image horizontally for a selfie-view display.
-    cv2.imshow('MediaPipe Face Detection', cv2.flip(image, 1))
-    if cv2.waitKey(5) & 0xFF == 27:
-      break
+    # cv2.imshow('MediaPipe Face Detection', cv2.flip(image, 1))
+    # if cv2.waitKey(5) & 0xFF == 27:
+    #   break
 cap.release()

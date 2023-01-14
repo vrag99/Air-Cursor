@@ -13,18 +13,23 @@ def recognise(img):
         thirdFingerDown = tracker.getLms(img, 14)[1] < tracker.getLms(img, 16)[1]
         fourthFingerDown = tracker.getLms(img, 18)[1] < tracker.getLms(img, 20)[1]
         thumbCovered = tracker.getLms(img, 3)[0] < tracker.getLms(img, 4)[0]
+
         l =  [firstFingerDown, secondFingerDown, thirdFingerDown, fourthFingerDown, thumbCovered]
         
         if all(l) == True:
             return 'fist'
         elif l[0] == False and all(l[1:]) == True:
-            return 'index-finger-up'
+            return 'index-finger-up_thumb_closed'
+        elif l[0] == False and all(l[1:4]) == True and l[4]== False:
+            return 'index-finger-up_thumb_opened'    
         elif all(l[:2]) == False and all(l[2:]) == True:
-            return '2-fingers-up'
+            return '2-fingers-up_thumb_closed'
         elif all(l[:3]) == False and all(l[3:]) == True:
-            return '3-fingers-up'
+            return '3-fingers-up_thumb_closed'
         elif all(l[:4]) == False and all(l[4:]) == True:
-            return '4-fingers-up'
+            return '4-fingers-up_thumb_closed'
+        elif all(l[:2]) == False and all(l[2:4]) == True and l[4] == False:
+            return '2-fingers-up_thumb_opened'    
         elif all(l) == False:
             return 'open-palm'
         
