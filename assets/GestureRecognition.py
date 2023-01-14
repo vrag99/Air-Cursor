@@ -1,6 +1,6 @@
 import cv2
 import mediapipe as mp
-from HandTrackerModule import HandTracker
+from .HandTrackerModule import HandTracker
 import time
 
 
