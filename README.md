@@ -20,6 +20,12 @@ All of us made separate functionalities of the cursor which were then incorporat
 We collaborated on the project using Github and Git, which was a first experience for us.
 Not to mention that we did not know how to run a simple for loop a week ago in python.
 
+## Setup
+```
+pip install -r requirements.txt
+python master.py
+```
+
 ## Challenges Faced
 
 This is a good time to mention that we tried using multiprocessing as well so as to improve the performance of the cursor but were unable to do that as the code initialised Tensorflow recursively, which made it even slower.
