@@ -1,4 +1,4 @@
-<img src = "/AIR_CURSOR.png" alt="aircursor" align="center" width="900" />
+<img src = "/LAZY_FINGERS.png" alt="aircursor" align="center" width="900" />
 
 # About Our Project
 
