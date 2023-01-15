@@ -7,7 +7,7 @@ from ctypes import cast, POINTER
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import numpy as np
-# from privacy import pir
+from assets.privacy import pir
 from threading import Thread
 import math
 
@@ -16,8 +16,6 @@ SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
 sensitivity=1.5
 
 tracker = HandTracker()
-# privacy = Thread(target = pir, daemon=True)
-# privacy.start()
 
 vid = cv2.VideoCapture(0)
 
@@ -28,6 +26,9 @@ initialVolY, finalVolY = 0, 0
 while True:
     success, img = vid.read()
     img = cv2.flip(img, 1)
+    
+    privacy = Thread(target = pir, daemon=True, args=(img,))
+    privacy.start()
     
     gesture = recognise(img)
     gestureList.append(gesture)
@@ -110,44 +111,8 @@ while True:
             pyautogui.hotkey('win', 'd')
         
         else:
-            # The volume functionality doesn't work till now.
-            midHand = tracker.getLms(img, 9)
-            x, y = midHand
-            devices = AudioUtilities.GetSpeakers()
-            interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-            volume = cast(interface, POINTER(IAudioEndpointVolume))
-
-            # initializing volume settings
-            volumeRange = volume.GetVolumeRange()
-            volMin = volumeRange[0]
-            volMax = volumeRange[1]
-            volume.SetMasterVolumeLevel(-65.25, None)
-            
-            # if y!= None:
-            #     # vol = volMin
-            #     initialVolY, finalVolY = finalVolY, y
-            #     change = finalVolY - initialVolY
-            #     print(change)
-                
-            #     if change < 0:
-            #         for i in range(abs(change)//2):
-            #             pyautogui.press('volumeup')
-            #     elif change > 0:
-            #         for i in range(abs(change)//2):
-            #             pyautogui.press('volumedown')
-                    
-                
-            
-            if (abs(change) > 10):
-                vol_change = np.interp(-change, [-200, 200], [-65, 65])
-            else:
-                vol_change = 0
-                
-            vol = vol + vol_change
-            if vol>volMax: vol = volMax
-            elif vol<=volMin: vol = volMin
-            
-            volume.SetMasterVolumeLevel(vol, None)
+            # The volume functionality couldn't be merged.
+            pass
             
 
     img = tracker.findHands(img)

@@ -21,7 +21,7 @@ def pir(image):
   #       continue
 
       #image.flags.writeable = False
-      #image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+      image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
       results = face_detection.process(image)
 
       # Draw the face detection annotations on the image.
